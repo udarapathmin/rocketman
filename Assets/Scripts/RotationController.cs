@@ -45,6 +45,7 @@ public class RotationController : MonoBehaviour {
                 finalAngle.z = Mathf.Clamp(finalAngle.z, 20, 50); ;
                 Rigidbody2D playerBody = GetComponent<Rigidbody2D>();
                 playerBody.isKinematic = false;
+                playerBody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
                 playerBody.AddForceAtPosition(new Vector2(finalAngle.z, finalAngle.z), new Vector2(transform.position.x, transform.position.y), ForceMode2D.Impulse);
 
@@ -62,6 +63,11 @@ public class RotationController : MonoBehaviour {
             Rigidbody2D rg = background.GetComponent<Rigidbody2D>();
             rg.velocity = Vector3.zero;
         }
+    }
+
+    void changeAngleOnUpdate()
+    {
+
     }
 }
 
