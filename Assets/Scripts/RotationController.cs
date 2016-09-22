@@ -13,9 +13,9 @@ public class RotationController : MonoBehaviour {
     void Update()
     {
       
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(1))
         {
-            Debug.Log("Pressed left click.");
+            
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit = new RaycastHit();
@@ -30,7 +30,7 @@ public class RotationController : MonoBehaviour {
                 transform.rotation = Quaternion.Euler(myRotation);
             }
 
-        } if (Input.GetMouseButtonUp(0)) {
+        } if (Input.GetMouseButtonUp(1)) {
 
            
             Debug.Log("Released left click.");
