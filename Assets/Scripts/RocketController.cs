@@ -8,6 +8,7 @@ public class RocketController : MonoBehaviour {
     Rect fuelRect;
     Texture2D fuelTexture;
     bool fuelstat =true;
+    bool jetpackActive = false;
 	void Start () {
         fuelRect = new Rect(Screen.width / 10, Screen.height * 9 / 10, Screen.width / 3, Screen.height / 50);
         fuelTexture = new Texture2D(1,1);
@@ -19,7 +20,7 @@ public class RocketController : MonoBehaviour {
     void FixedUpdate()
     {
         
-        bool jetpackActive = Input.GetKey("left shift");
+        //bool jetpackActive = Input.GetKey("left shift");
         GameObject man = GameObject.Find("man");
         Rigidbody2D rg = man.GetComponent<Rigidbody2D>();
         
@@ -57,5 +58,16 @@ public class RocketController : MonoBehaviour {
         GameObject man = GameObject.Find("man");
         Rigidbody2D rg = man.GetComponent<Rigidbody2D>();
         
+    }
+
+    public void Button_Click_D() {
+        Debug.Log("Pressed gas button.");
+        jetpackActive = true;
+    }
+
+    public void Button_Click_U()
+    {
+        Debug.Log("released gas button.");
+        jetpackActive = false;
     }
 }
