@@ -1,12 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class RotationController : MonoBehaviour {
-    
+    //Score
+    private int score = 0;
+    private int objectscores = 0;
+    public Text scoreText;
+    private float startTime;
+
 	// Use this for initialization
     public Transform target;
     private Vector3 myRotation;
     private bool updating = true;
+    private bool onPlay = true;
+
+    public float rotationDegreesPerSecond = 45f;
+    public float rotationDegreesAmount = 90f;
+    private float totalRotation = 0;
+    //private float degreesPerSecond = 0.5f;
 
     void Awake() {
        
@@ -17,6 +29,7 @@ public class RotationController : MonoBehaviour {
 
         if (updating)
         {
+            
             if (Input.GetMouseButton(1))
             {
 
@@ -42,7 +55,7 @@ public class RotationController : MonoBehaviour {
                 Debug.Log("Released left click.");
 
                 Vector3 finalAngle = transform.localEulerAngles;
-                finalAngle.z = Mathf.Clamp(finalAngle.z, 20, 50); ;
+                finalAngle.z = Mathf.Clamp(finalAngle.z, 20, 50);
                 Rigidbody2D playerBody = GetComponent<Rigidbody2D>();
                 playerBody.isKinematic = false;
                 playerBody.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -50,24 +63,86 @@ public class RotationController : MonoBehaviour {
                 playerBody.AddForceAtPosition(new Vector2(finalAngle.z, finalAngle.z), new Vector2(transform.position.x, transform.position.y), ForceMode2D.Impulse);
 
                 this.updating = false;
+                startTime = Time.time;
+                
             }
+        }
+        if (!updating && onPlay)
+        {
+            score = (int)(Time.time - startTime);
+            updateScore();
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "background")  // or if(gameObject.CompareTag("YourWallTag"))
+        if (collision.gameObject.tag == "floor")  // or if(gameObject.CompareTag("YourWallTag"))
         {
+            
+            GameObject man = GameObject.Find("man");
+            Rigidbody2D rg = man.GetComponent<Rigidbody2D>();
+            rg.constraints = RigidbodyConstraints2D.FreezeAll;
+            Time.timeScale = 0;
+            Debug.Log("ddddd");
+            onPlay = false;
 
-            GameObject background = GameObject.Find("background");
-            Rigidbody2D rg = background.GetComponent<Rigidbody2D>();
-            rg.velocity = Vector3.zero;
         }
     }
 
-    void changeAngleOnUpdate()
+    void SwingOpen()
+    {
+        transform.Rotate(Vector3.forward, Time.deltaTime * 10, Space.Self);
+    }
+
+    public void updateScore()
+    {
+        scoreText.text = "Score : " + (score + objectscores).ToString();
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
     {
 
+        if (col.gameObject.tag == "balloon")  // or if(gameObject.CompareTag("YourWallTag"))
+        {
+            GameObject mn = GameObject.Find("man");
+            Rigidbody2D rg2 = mn.GetComponent<Rigidbody2D>();
+            Vector3 dir = Quaternion.AngleAxis(0, Vector3.up) * (Vector3.up);
+            rg2.AddForce(dir * 30.0f, ForceMode2D.Impulse);
+            //Debug.Log("ddddd");
+            objectscores = objectscores + 50;
+
+            Destroy(col.gameObject);
+        }
+        if (col.gameObject.tag == "storm")  // or if(gameObject.CompareTag("YourWallTag"))
+        {
+            GameObject mn = GameObject.Find("man");
+            Rigidbody2D rg2 = mn.GetComponent<Rigidbody2D>();
+            Vector3 dir = Quaternion.AngleAxis(0, Vector3.up) * (Vector3.up);
+            rg2.AddForce(dir * 75.0f, ForceMode2D.Impulse);
+
+            objectscores = objectscores - 30;
+
+            if(objectscores<0){
+                objectscores = 0;
+            
+            }
+
+            //Debug.Log("ddddd");
+        }
+
+        if (col.gameObject.tag == "plane")  // or if(gameObject.CompareTag("YourWallTag"))
+        {
+            GameObject mn = GameObject.Find("man");
+            Rigidbody2D rg2 = mn.GetComponent<Rigidbody2D>();
+            Vector3 dir = Quaternion.AngleAxis(0, Vector3.up) * (Vector3.up);
+            rg2.AddForce(dir * 90.0f, ForceMode2D.Impulse);
+
+            objectscores = objectscores + 1000;
+
+          
+
+            //Debug.Log("ddddd");
+        }
     }
 }
 
