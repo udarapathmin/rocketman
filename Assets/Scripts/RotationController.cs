@@ -15,10 +15,26 @@ public class RotationController : MonoBehaviour {
     private bool updating = true;
     private bool onPlay = true;
 
+    private int finalscore = 0;
+
     public float rotationDegreesPerSecond = 45f;
     public float rotationDegreesAmount = 90f;
     private float totalRotation = 0;
     //private float degreesPerSecond = 0.5f;
+
+    //Game objectives
+    private int balooncrashcount = 0;
+    public Text gameInst;
+    public GameObject gametext;
+
+    // Game Over
+    public GameManager Manager;
+
+
+    void Start()
+    {
+        StartCoroutine(WaitAndDissable());
+    }
 
     void Awake() {
        
@@ -67,6 +83,7 @@ public class RotationController : MonoBehaviour {
                 
             }
         }
+
         if (!updating && onPlay)
         {
             score = (int)(Time.time - startTime);
@@ -76,7 +93,7 @@ public class RotationController : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "floor")  // or if(gameObject.CompareTag("YourWallTag"))
+        if (collision.gameObject.tag == "ground")  // or if(gameObject.CompareTag("YourWallTag"))
         {
             
             GameObject man = GameObject.Find("man");
@@ -99,6 +116,27 @@ public class RotationController : MonoBehaviour {
         scoreText.text = "Score : " + (score + objectscores).ToString();
     }
 
+    IEnumerator WaitAndDissable()
+    {
+        float time = 5f;
+        yield return new WaitForSeconds(time);
+
+        gametext.SetActive(false);
+    }
+
+    public void increase_baloon_count()
+    {
+        {
+            balooncrashcount++;
+            if (balooncrashcount == 3)
+            {
+                Manager.GameWin();
+                updating = true;
+                scoreText.text = "Score : " + (score + objectscores).ToString();
+            }
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D col)
     {
 
@@ -112,6 +150,8 @@ public class RotationController : MonoBehaviour {
             objectscores = objectscores + 50;
 
             Destroy(col.gameObject);
+
+            increase_baloon_count();
         }
         if (col.gameObject.tag == "storm")  // or if(gameObject.CompareTag("YourWallTag"))
         {
@@ -143,7 +183,17 @@ public class RotationController : MonoBehaviour {
 
             //Debug.Log("ddddd");
         }
+
+        if (col.gameObject.tag == "ground")  // or if(gameObject.CompareTag("YourWallTag"))
+        {
+
+            Manager.GameOver();
+            updating = true;
+            finalscore = score;
+            Debug.Log("ground");
+        }
     }
+
 }
 
 

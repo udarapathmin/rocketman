@@ -11,7 +11,7 @@ public class RocketController : MonoBehaviour {
     bool fuelstat =true;
     bool jetpackActive = false;
 	void Start () {
-        fuelRect = new Rect(Screen.width / 10, Screen.height * 9 / 10, Screen.width / 3, Screen.height / 50);
+        fuelRect = new Rect(Screen.width* 6/ 10, Screen.height*9/10, Screen.width/3, Screen.height/70);
         fuelTexture = new Texture2D(1,1);
         fuelTexture.SetPixel(0, 0, Color.red);
         fuelTexture.Apply();
@@ -49,7 +49,7 @@ public class RocketController : MonoBehaviour {
     void OnGUI() {
 
         float ratio = fuel / maxFuel;
-        float rectWidth = ratio * Screen.width / 3;
+        float rectWidth = ratio * Screen.width / 4;
         fuelRect.width = rectWidth;
         GUI.DrawTexture(fuelRect,fuelTexture);
     }
@@ -80,16 +80,17 @@ public class RocketController : MonoBehaviour {
         }
     }
 
-    //public void Button_Click_D() {
-    //    Debug.Log("Pressed gas button.");
-    //    jetpackActive = true;
-    //}
+    public void Button_Click_D()
+    {
+        Debug.Log("Pressed gas button.");
+        jetpackActive = true;
+    }
 
-    //public void Button_Click_U()
-    //{
-    //    Debug.Log("released gas button.");
-    //    jetpackActive = false;
-    //}
+    public void Button_Click_U()
+    {
+        Debug.Log("released gas button.");
+        jetpackActive = false;
+    }
 
     public void update_score_withtime() {
 

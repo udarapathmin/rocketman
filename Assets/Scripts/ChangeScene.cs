@@ -6,7 +6,7 @@ public class ChangeScene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        
 	}
 	
 	// Update is called once per frame
@@ -14,8 +14,8 @@ public class ChangeScene : MonoBehaviour {
         
 	}
 
-    public void playGame() {
-
-        SceneManager.LoadScene("Start_scean");
+    public void playGame(string sceanName) {
+        
+        SceneManager.LoadScene(sceanName);
     }
 }

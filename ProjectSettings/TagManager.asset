@@ -9,6 +9,7 @@ TagManager:
   - floor
   - gas
   - plane
+  - ground
   layers:
   - Default
   - TransparentFX
